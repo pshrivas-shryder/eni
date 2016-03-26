@@ -1,7 +1,7 @@
 const mongoose = require('mongoose');
 const Schema = mongoose.Schema;
 
-const User = new Schema({
+const catalogueModel = new Schema({
 	desc: {
 		type: String,
 		unique: true,
@@ -28,4 +28,4 @@ const User = new Schema({
 { timestamps: true }
 );
 
-module.exports = mongoose.model('User', User);
+module.exports = mongoose.model('catalogueModel', catalogueModel);
