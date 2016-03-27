@@ -372,23 +372,26 @@ $('.owl-carousel').owlCarousel({
     );
   }
   var bindPostData = function(access_token) {
-
-    $.ajax({
-       type: 'GET',
-       url: 'https://graph.facebook.com/987781921275479?access_token='+access_token,
-       async: false,
-       data: {
-           fields: 'picture'//received via response.authResponse.accessToken after login
-       },
-       success: function(response) {
-           if (response && !response.error) {
-            alert(1);
-            console.log(response);
-            return response.picture.data.url;
-               //window.open('http://www.facebook.com/photo.php?fbid=' + response.id + '&makeprofile=1');
+    $.each(Posts, function(k, v) {
+      $.each(v.comments, function(key, comment) {
+        $.ajax({
+           type: 'GET',
+           url: 'https://graph.facebook.com/'+comment.fromId+'?access_token='+access_token,
+           async: false,
+           data: {
+               fields: 'picture'//received via response.authResponse.accessToken after login
+           },
+           success: function(response) {
+               if (response && !response.error) {
+                console.log(response);
+                comment.fromPictureUrl = response.picture.data.url;
+                   //window.open('http://www.facebook.com/photo.php?fbid=' + response.id + '&makeprofile=1');
+               }
            }
-       }
+        });
+      });
     });
+
   } 
 
 
