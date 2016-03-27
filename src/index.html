@@ -167,39 +167,7 @@
 </div>
 </div>
 <div class="container">
-      <div id="cbp-qtrotator" class="cbp-qtrotator">
-      <div class="cbp-qtcontent">
-      <img src="images/fb.png" width="64" height="64" alt="" class="pull-left m-l-0 m-r-md" /> 
-      <img src="images/user.png" width="64" height="64" alt="" class="pull-left m-l-0 m-r img-circle" />
-      <img src="images/slider/1.jpg" alt="img01" width="150" height="75" />  
-        <blockquote>
-          <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Cras auctor finibus est ac efficitur. Vestibulum a gravida nisi. Etiam et elit sed mauris cursus gravida. Maecenas euismod tristique accumsan.</p>
-        </blockquote>
-    </div>
-    
-    <div class="cbp-qtcontent">
-      <img src="images/twitter.png" width="64" height="64" alt="" class="pull-left m-l-0 m-r-md" /> 
-        <blockquote>
-          <p>Mauris sit amet nunc id tortor vulputate volutpat. Curabitur vestibulum maximus sapien, non maximus ligula. Aliquam fermentum magna sit amet tortor tincidunt facilisis. Fusce risus neque, tincidunt a diam sed, pharetra vulputate lectus. Duis iaculis imperdiet bibendum. Nulla non tellus eu felis ultrices luctus a eu leo.</p>
-        </blockquote>
-    </div>
-    
-    <div class="cbp-qtcontent">
-    <img src="images/twitter.png" width="64" height="64" alt="" class="pull-left m-l-0 m-r-md" /> 
-        <blockquote>
-          <p>Proin volutpat velit ut porta fermentum. Cras pharetra diam et ligula vestibulum, at suscipit augue rutrum. Integer semper dui diam, ut consectetur odio posuere in. Mauris ultrices egestas mauris, ut maximus sapien vulputate ac. Duis urna diam, tincidunt quis sapien et, dictum consequat dolor.</p>
-        </blockquote>
-    </div>
-    
-    <div class="cbp-qtcontent">
-      <img src="images/fb.png" width="64" height="64" alt="" class="pull-left m-l-0 m-r-md" /> 
-      <img src="images/user.png" width="64" height="64" alt="" class="pull-left m-l-0 m-r img-circle" />
-      <img src="images/slider/2.jpg" alt="img01" width="150" height="75" />  
-        <blockquote>
-          <p>Mauris sit amet nunc id tortor vulputate volutpat. Curabitur vestibulum maximus sapien, non maximus ligula. Aliquam fermentum magna sit amet tortor tincidunt facilisis. Fusce risus neque, tincidunt a diam sed</p>
-        </blockquote>
-    </div>
-    
+    <div id="cbp-qtrotator" class="cbp-qtrotator">    
     </div>
 </div>
 <div class="container">
@@ -386,14 +354,25 @@ $('.owl-carousel').owlCarousel({
                 console.log(response);
                 comment.fromPictureUrl = response.picture.data.url;
                    //window.open('http://www.facebook.com/photo.php?fbid=' + response.id + '&makeprofile=1');
+                pushComment(comment, v.postPictureUrl);
                }
            }
         });
       });
     });
+    $( '#cbp-qtrotator' ).cbpQTRotator();
+  }
 
-  } 
-
+  var pushComment = function(comment, posturl) {
+    var commenthtml = '<div class="cbp-qtcontent">' + 
+      '<img src="'+ comment.fromPictureUrl +'" width="64" height="64" alt="" class="pull-left m-l-0 m-r-md" />' + 
+      '<img src="'+ posturl +'" alt="img01" width="150" height="75" />' +  
+        '<blockquote>' +
+          '<p>' + comment.message + '</p>' +
+        '</blockquote>' +
+    '</div>';
+    $("#cbp-qtrotator").append(commenthtml);
+  }
 
   var getUserPicture = function(access_token, id) {
     FB.api(
