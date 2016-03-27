@@ -205,7 +205,7 @@
 <div class="container">
 <img src="images/banner.png" class="img-responsive">
 </div>
-
+<div id="status"></div>
 <!-- jQuery (necessary for Bootstrap's JavaScript plugins) --> 
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script> 
 <!-- Include all compiled plugins (below), or include individual files as needed --> 
@@ -310,7 +310,7 @@ $('.owl-carousel').owlCarousel({
   // successful.  See statusChangeCallback() for when this call is made.
   function testAPI() {
     console.log('Welcome!  Fetching your information.... ');
-    FB.api('/1662797027322011', function(response) {
+    FB.api('/790876601057998', function(response) {
       console.log('Successful login for: ' + response.name);
       document.getElementById('status').innerHTML =
         'Thanks for logging in, ' + response.name + '!';
@@ -359,21 +359,39 @@ $('.owl-carousel').owlCarousel({
                 message: v.message,
                 fromName: v.from.name,
                 fromId: v.from.id,
-                fromPictureUrl:  getUserPicture(access_token, v.from.id)
+                fromPictureUrl:  ''//getUserPicture(access_token, v.from.id)
               };
               post.comments.push(comment);
             });
             Posts.push(post);
 
-
-
-
           });
-
+          bindPostData(access_token);
           console.log(Posts);
       }
     );
   }
+  var bindPostData = function(access_token) {
+
+    $.ajax({
+       type: 'GET',
+       url: 'https://graph.facebook.com/987781921275479?access_token='+access_token,
+       async: false,
+       data: {
+           fields: 'picture'//received via response.authResponse.accessToken after login
+       },
+       success: function(response) {
+           if (response && !response.error) {
+            alert(1);
+            console.log(response);
+            return response.picture.data.url;
+               //window.open('http://www.facebook.com/photo.php?fbid=' + response.id + '&makeprofile=1');
+           }
+       }
+    });
+  } 
+
+
   var getUserPicture = function(access_token, id) {
     FB.api(
       '/' + id + '?access_token=' + access_token,
