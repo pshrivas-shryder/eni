@@ -218,6 +218,7 @@ $('.owl-carousel').owlCarousel({
 </script>
 <script>
   var Posts = [];
+  var Albums = [];
   // This is called with the results from from FB.getLoginStatus().
   function statusChangeCallback(response) {
     console.log('statusChangeCallback');
@@ -230,6 +231,7 @@ $('.owl-carousel').owlCarousel({
       // Logged into your app and Facebook.
        testAPI();
        getAllPosts(response.authResponse.accessToken);
+       getAllAlbums(response.authResponse.accessToken);
     } else if (response.status === 'not_authorized') {
       // The person is logged into Facebook, but not your app.
       document.getElementById('status').innerHTML = 'Please log ' +
@@ -322,16 +324,18 @@ $('.owl-carousel').owlCarousel({
               postPictureUrl: value.picture,
               comments: []
             };
-            $.each(value.comments.data, function(k, v) { 
-              var comment = {
-                message: v.message,
-                fromName: v.from.name,
-                fromId: v.from.id,
-                fromPictureUrl:  ''//getUserPicture(access_token, v.from.id)
-              };
-              post.comments.push(comment);
-            });
-            Posts.push(post);
+            if(value.comments) {
+              $.each(value.comments.data, function(k, v) { 
+                var comment = {
+                  message: v.message,
+                  fromName: v.from.name,
+                  fromId: v.from.id,
+                  fromPictureUrl:  ''//getUserPicture(access_token, v.from.id)
+                };
+                post.comments.push(comment);
+              });
+              Posts.push(post);
+            }
 
           });
           bindPostData(access_token);
@@ -339,8 +343,67 @@ $('.owl-carousel').owlCarousel({
       }
     );
   }
+  var getAllAlbums = function(access_token) {
+    FB.api(
+      '/790876601057998?access_token=' + access_token,
+      'GET',
+      {"fields":"albums{photos{picture,comments}}"},
+      function(response) {
+        if(response.albums) {
+          $.each(response.albums.data, function(av, album) {
+            $.each(album.photos.data, function(key, value) {
+              var post = {
+                postId: value.id,
+                postPictureUrl: value.picture,
+                comments: []
+              };
+              if(value.comments) {
+                $.each(value.comments.data, function(k, v) { 
+                  var comment = {
+                    message: v.message,
+                    fromName: v.from.name,
+                    fromId: v.from.id,
+                    fromPictureUrl:  ''
+                  };
+                  post.comments.push(comment);
+                });
+                Albums.push(post);
+              }
+            });            
+          });
+
+          bindAlbumData(access_token);
+        }
+      }
+    );
+  }
   var bindPostData = function(access_token) {
+
     $.each(Posts, function(k, v) {
+      $.each(v.comments, function(key, comment) {
+        $.ajax({
+           type: 'GET',
+           url: 'https://graph.facebook.com/'+comment.fromId+'?access_token='+access_token,
+           async: false,
+           data: {
+               fields: 'picture'//received via response.authResponse.accessToken after login
+           },
+           success: function(response) {
+               if (response && !response.error) {
+                console.log(response);
+                comment.fromPictureUrl = response.picture.data.url;
+                   //window.open('http://www.facebook.com/photo.php?fbid=' + response.id + '&makeprofile=1');
+                pushComment(comment, v.postPictureUrl);
+               }
+           }
+        });
+      });
+    });
+    $( '#cbp-qtrotator' ).cbpQTRotator();
+  }
+
+  var bindAlbumData = function(access_token) {
+    $.each(Albums, function(k, v) {
       $.each(v.comments, function(key, comment) {
         $.ajax({
            type: 'GET',
@@ -380,8 +443,7 @@ $('.owl-carousel').owlCarousel({
       'GET',
       {"fields":"picture"},
       function(response) {
-          return response.picture.data.url;
-
+        return response.picture.data.url;
       }
     );
   }
