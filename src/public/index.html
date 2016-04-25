@@ -195,7 +195,7 @@
 			var activeChieldId = $("li[class=active]").find('a').attr('chieldid');
 			console.log(activeChieldId);
 			$("#"+ activeChieldId).show();
-		}, 500);
+		}, 1000);
 	});
 </script>
 
@@ -243,12 +243,16 @@
 </div>
 <!--vertical slider start-->
 
-<!--Social Icons-->
-<div class="socialicon" >
-<div class="socialFacebook" id="socialFacebook">
-</div>
-<p><span id="likesPannel">5,300 </span> Likes <br/> Like us on Facebook.</p>
 
+<!--Social Icons-->
+<div class="socialicon-text text-center" id="test">
+<h1 id="likesPannel">5300</h1>
+<h2>Likes</h2>
+</div>
+
+<!--Social Icons-->
+<div class="socialicon text-center">
+<img src="images/facebook-like-hand.png" width="50" height="43" alt="" />
 </div>
 
 <script>
@@ -268,16 +272,21 @@ $(document).ready(function(){
 	//   controls: false,
 	//   pager: false,
 	// });
-	$("#socialFacebook").click(function (){
+	$(".socialicon").click(function (){
 	  likesCount++;
 	  updateLikesPannel();
 	});
-	
+	$( ".socialicon" ).click(function() {
+	  var divs = $( ".socialicon-text" )
+		.animate({ top: "-=50" }, 200 );
+	  divs.animate({ top: "+=50" }, 200 );
+	});
 });
 var updateLikesPannel = function () {
   	var _likesCount =  likesCount.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
   	$("#likesPannel").html(_likesCount);
 };
+
 </script>
 
 </body>

@@ -1,5 +1,22 @@
 var express = require('express');
+var Twitter = require('twitter');
 var app = express();
+
+var client = new Twitter({
+  consumer_key: 'FZUl0OfzBpmE7O2lNEBTRHO5j',
+  consumer_secret: 'tKqz3qATAJz7EGMAX2OHMDnG6M1MREnf3WG9tK6EcunF45yw6Y',
+  access_token_key: '4742496138-p5i8hV1XdLsrgXuG1tYroXVHhzYJleG9hQqr08B',
+  access_token_secret: 'cObxsYcOZCrR7YqGdGmRmG9BxeHg9X94Ly9IFJXXJZMXW'
+});
+var params = {screen_name: 'Levis'};
+var responseObj = {};
+client.get('statuses/user_timeline', params, function(error, tweets, response){
+  if (!error) {
+	console.log(tweets);
+	responseObj = tweets;
+  }
+});
+
 
 app.set('port', (process.env.PORT || 5000));
 
@@ -20,10 +37,16 @@ app.get('/getLikesCount', function(request, response) {
     })
 });
 
-app.get('/putLikesCount', function(request, response) {
+app.get('/IncrimentLikesCount', function(request, response) {
 	return response.json({
 		status: 'OK',
 		catalogues: {count : 10055},
+    })
+});
+app.get('/twitter', function(request, response) {
+	return response.json({
+		status: 'OK',
+		catalogues: responseObj,
     })
 });
 

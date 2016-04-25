@@ -33,29 +33,30 @@
       statusChangeCallback(response);
     });
   }
+  
    window.fbAsyncInit = function() {
-  FB.init({
-    appId      : '1662797027322011',
-    cookie     : true,  // enable cookies to allow the server to access 
-                        // the session
-    xfbml      : true,  // parse social plugins on this page
-    version    : 'v2.5' // use graph api version 2.5
-  });
+	  FB.init({
+		appId      : '1662797027322011',
+		cookie     : true,  // enable cookies to allow the server to access 
+							// the session
+		xfbml      : true,  // parse social plugins on this page
+		version    : 'v2.5' // use graph api version 2.5
+	  });
 
   
-  FB.getLoginStatus(function(response) {
-    statusChangeCallback(response);
-  });
+	  FB.getLoginStatus(function(response) {
+		statusChangeCallback(response);
+	  });
    };
 
   // Load the SDK asynchronously
-  (function(d, s, id) {
-    var js, fjs = d.getElementsByTagName(s)[0];
-    if (d.getElementById(id)) return;
-    js = d.createElement(s); js.id = id;
-    js.src = "https://connect.facebook.net/en_US/sdk.js";
-    fjs.parentNode.insertBefore(js, fjs);
-  }(document, 'script', 'facebook-jssdk'));
+	(function(d, s, id){
+     var js, fjs = d.getElementsByTagName(s)[0];
+     if (d.getElementById(id)) {return;}
+     js = d.createElement(s); js.id = id;
+     js.src = "https://connect.facebook.net/en_US/sdk.js";
+     fjs.parentNode.insertBefore(js, fjs);
+   }(document, 'script', 'facebook-jssdk'));
 
   // Here we run a very simple test of the Graph API after login is
   // successful.  See statusChangeCallback() for when this call is made.
@@ -66,9 +67,6 @@
       document.getElementById('status').innerHTML =
         'Thanks for logging in, ' + response.name + '!';
     });
-
-
-
   }
 
 // $.ajax({
@@ -86,12 +84,12 @@
 //     }
 // })
 
-  var responseAPI = function()
-    {
-      FB.api('/me', function(response) {
-          console.log(JSON.stringify(response));
-      });
-    }
+var responseAPI = function()
+{
+  FB.api('/me', function(response) {
+	  console.log(JSON.stringify(response));
+  });
+}
   var getAllPosts = function(access_token) {
     FB.api(
       '/790876601057998/posts?access_token=' + access_token,
